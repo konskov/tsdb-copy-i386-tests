@@ -712,8 +712,10 @@ select add_continuous_aggregate_policy('cagg_scheduler', interval '1 year', inte
 initial_start => :'init'::timestamptz + interval '5 ms', timezone => 'Europe/Athens');
 select * from _timescaledb_config.bgw_job;
 -- now wait for scheduler to run the policies
+SELECT * FROM sorted_bgw_log;
 SELECT ts_bgw_db_scheduler_test_run_and_wait_for_scheduler_finish(25);
 SELECT * from _timescaledb_internal.bgw_job_stat;
+SELECT * from sorted_bgw_log;
 
 SELECT show_chunks('test_table_scheduler');
 select hypertable_schema, hypertable_name, chunk_schema, chunk_name, is_compressed from timescaledb_information.chunks ;
@@ -738,3 +740,5 @@ SELECT ts_bgw_db_scheduler_test_run_and_wait_for_scheduler_finish(25);
 
 select * from _timescaledb_config.bgw_job order by id;
 select job_id, last_start, last_finish, next_start, last_successful_finish from _timescaledb_internal.bgw_job_stat order by job_id;
+
+SELECT * FROM sorted_bgw_log;
